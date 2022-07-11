@@ -21,7 +21,7 @@ $routes = [
 krsort($routes);
 
 foreach ($routes as $uri => $view) {
-    if (preg_match("#$uri#", trim($_SERVER['REQUEST_URI'], '/'))) {
+    if (preg_match("#^$uri$#", strtok(trim($_SERVER['REQUEST_URI'], '/'), '?'))) {
         view($view);
         break;
     }
