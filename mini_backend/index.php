@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @param string $view
  * @param string $encoder
@@ -14,15 +15,23 @@ function view(string $view, string $encoder = '.php'): void
     }
 }
 
+/**
+ * @param array $routes
+ * @return void
+ */
+function run(array $routes): void
+{
+    krsort($routes);
+    foreach ($routes as $uri => $view) {
+        if (preg_match("#^$uri$#", strtok(trim($_SERVER['REQUEST_URI'], '/'), '?'))) {
+            view($view);
+            break;
+        }
+    }
+}
+
 $routes = [
     '' => 'page'
 ];
 
-krsort($routes);
-
-foreach ($routes as $uri => $view) {
-    if (preg_match("#^$uri$#", strtok(trim($_SERVER['REQUEST_URI'], '/'), '?'))) {
-        view($view);
-        break;
-    }
-}
+run($routes);
